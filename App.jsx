@@ -7,7 +7,8 @@ import Hello from './src/components/Hello';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Hello />
+      <Hello bang>Bule World</Hello>
+      <Hello style={{ backgroundColor: '#FC9898' }}> Red World</Hello>
       <Text>Open up App.js to start working on your app!</Text>
       {/* eslint-disable-next-line */}
       <StatusBar style="auto" />
