@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, TextInput, TouchableOpacity, Alert,
 } from 'react-native';
@@ -11,6 +11,29 @@ export default function LogInScreen(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  // useEffectテスト
+  // useEffect(() => {
+  //   console.log('useEffect');
+  //   return () => {
+  //     console.log('Unmount');
+  //   };
+  // }, []);
+
+  // 画面表示された際に発火
+  // 第２引数の配列は画面が表示された瞬間1回だけ実行
+  useEffect(() => {
+    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        navigation.reset({
+          index: 0, // navigationの上書き
+          routes: [{ name: 'MemoList' }], // 履歴の中にこれしかなくて，それの0番目を表示してください．
+        });
+      }
+    });
+    // 関数を実行すると関しをキャンセルできる．
+    return unsubscribe;
+  }, []);
+
   function handlePress() {
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
@@ -18,7 +41,7 @@ export default function LogInScreen(props) {
         console.log(user.uid);
         navigation.reset({
           index: 0, // navigationの上書き
-          routes: [{ name: 'MemoList' }], // 履歴の中中にこれしかなくて，それの0番目を表示してください．
+          routes: [{ name: 'MemoList' }], // 履歴の中にこれしかなくて，それの0番目を表示してください．
         });
       })
       .catch((error) => {
