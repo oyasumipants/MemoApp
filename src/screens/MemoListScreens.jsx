@@ -38,6 +38,7 @@ export default function MemoListScreen(props) {
         Alert.alert('データの読み込みに失敗しました．');
       });
     }
+    // 監視をやめる
     return unsubscribe;
   }, []);
 
