@@ -5,11 +5,13 @@ import {
 import firebase from 'firebase';
 
 import Button from '../components/Button';
+import Loading from '../components/Loading';
 
 export default function LogInScreen(props) {
   const { navigation } = props;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setLoading] = useState(true);
 
   // useEffectテスト
   // useEffect(() => {
@@ -28,6 +30,8 @@ export default function LogInScreen(props) {
           index: 0, // navigationの上書き
           routes: [{ name: 'MemoList' }], // 履歴の中にこれしかなくて，それの0番目を表示してください．
         });
+      } else {
+        setLoading(false);
       }
     });
     // 関数を実行すると関しをキャンセルできる．
@@ -35,6 +39,7 @@ export default function LogInScreen(props) {
   }, []);
 
   function handlePress() {
+    setLoading(true);
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
         const { user } = userCredential;
@@ -47,11 +52,15 @@ export default function LogInScreen(props) {
       .catch((error) => {
         console.log(error.code, error.message);
         Alert.alert(error.code);
+      })
+      .then(() => {
+        setLoading(false);
       });
   }
 
   return (
     <View style={styles.container}>
+      <Loading isLoading={isLoading} />
       <View style={styles.inner}>
         <Text style={styles.title}>ログイン</Text>
         <TextInput
