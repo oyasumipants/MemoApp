@@ -31,7 +31,6 @@ export default function MemoListScreen(props) {
       unsubscribe = ref.onSnapshot((snapshot) => {
         const userMemos = []; // 一時的な配列
         snapshot.forEach((doc) => {
-          console.log(doc.id, doc.data());
           const data = doc.data(); // メモ情報の加工
           userMemos.push({ // 加工した情報を配列に入れる
             id: doc.id,
@@ -41,8 +40,7 @@ export default function MemoListScreen(props) {
         });
         setMemos(userMemos); // 保存
         setLoading(false); // ロード完了
-      }, (error) => {
-        console.log(error);
+      }, () => {
         setLoading(false); // ロード完了
         Alert.alert('データの読み込みに失敗しました．');
       });
